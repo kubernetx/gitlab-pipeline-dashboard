@@ -6,7 +6,6 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import reactor.core.publisher.Mono
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
@@ -17,13 +16,27 @@ class GitlabClientIT {
 
     @Test
     fun fetchPipeline() {
-        Assertions.assertThat(gitlabClient.fetchPipelines(185).count().block()).isGreaterThan(0)
+        Assertions.assertThat(gitlabClient.fetchPipelines(185, sort = Sort.DESC)
+                .doOnNext{println(it)}
+                .count()
+                .block())
+                .isGreaterThan(0)
     }
 
     @Test
     fun deletePipeline() {
         val resp = gitlabClient.deletePipeline(185, 75980)
-                .onStatus({ it.is4xxClientError }, { Mono.empty() })
-        println(resp.bodyToMono(String::class.java).block())
+    }
+
+    @Test
+    fun fetchProjects() {
+        val resp = gitlabClient.fetchProjects().doOnNext{ println(it)}.blockLast()
+
+    }
+
+    @Test
+    fun fetchProject() {
+        val resp = gitlabClient.fetchProject("CFC/cfc-web-app-bff").doOnNext{ println(it)}.block()
+
     }
 }

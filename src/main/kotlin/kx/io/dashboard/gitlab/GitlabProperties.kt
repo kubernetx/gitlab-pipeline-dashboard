@@ -6,4 +6,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class GitlabProperties {
     lateinit var hostUrl: String
     lateinit var accessToken: String
+    lateinit var projects: List<String>
 }

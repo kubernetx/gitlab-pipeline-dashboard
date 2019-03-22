@@ -1,3 +1,5 @@
 gitlab:
   hostUrl: ""
   accessToken: ""
+  projects:
+    - ""
