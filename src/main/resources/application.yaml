@@ -1,5 +1,30 @@
+
+
 gitlab:
-  hostUrl: ""
+  hostUrl: "https://gitlab.example.com/api/v4"
   accessToken: ""
+  branchRefs:
+    - 'master'
+    - '^feature\/\S*'
+    - '^release\/\S*'
   projects:
-    - ""
+    - pathWithNamespace: "org/project1"
+      branchRefs:
+        - 'master'
+        - '^feature\/\S*'
+        - '^release\/\S*'
+    - pathWithNamespace: "org/project2"
+server:
+  port: 3000
+
+management:
+  endpoint:
+    prometheus:
+      cache:
+        time-to-live: 0ms
+      enabled: true
+
+  endpoints:
+    web:
+      exposure:
+        include: info, health, prometheus

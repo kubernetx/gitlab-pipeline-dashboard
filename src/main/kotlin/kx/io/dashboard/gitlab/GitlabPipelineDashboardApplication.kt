@@ -3,10 +3,11 @@ package kx.io.dashboard.gitlab
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Bean
+import org.springframework.scheduling.annotation.EnableScheduling
 
-@EnableConfigurationProperties(GitlabProperties::class)
+@EnableScheduling
 @SpringBootApplication
+@EnableConfigurationProperties(GitlabProperties::class)
 class GitlabPipelineDashboardApplication
 
 fun main(args: Array<String>) {
