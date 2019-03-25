@@ -16,27 +16,10 @@ class GitlabClientIT {
 
     @Test
     fun fetchPipeline() {
-        Assertions.assertThat(gitlabClient.fetchPipelines(185, sort = Sort.DESC)
+        Assertions.assertThat(gitlabClient.fetchPipelines("org/project1", sort = Sort.DESC)
                 .doOnNext{println(it)}
                 .count()
                 .block())
                 .isGreaterThan(0)
-    }
-
-    @Test
-    fun deletePipeline() {
-        val resp = gitlabClient.deletePipeline(185, 75980)
-    }
-
-    @Test
-    fun fetchProjects() {
-        val resp = gitlabClient.fetchProjects().doOnNext{ println(it)}.blockLast()
-
-    }
-
-    @Test
-    fun fetchProject() {
-        val resp = gitlabClient.fetchProject("CFC/cfc-web-app-bff").doOnNext{ println(it)}.block()
-
     }
 }

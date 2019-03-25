@@ -1,5 +1,6 @@
 package kx.io.dashboard.gitlab
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -12,7 +13,14 @@ class GitlabConfiguration {
     }
 
     @Bean
-    fun gitLabProjects(gitlabProperties: GitlabProperties): List<Project?> {
-        return gitlabProperties.projects.map { gitlabClient(gitlabProperties).fetchProject(it).block() }
+    fun gitLabPipelineService(gitlabClient: GitlabClient): GitlabPipelineService {
+        return GitlabPipelineService(gitlabClient)
+    }
+
+    @Bean
+    fun gitlabPipelineMetrics(gitLabPipelineService: GitlabPipelineService,
+                              meterRegistry: MeterRegistry,
+                              gitlabProperties: GitlabProperties) : GitlabPipelineMetrics {
+        return GitlabPipelineMetrics(gitLabPipelineService, meterRegistry, gitlabProperties)
     }
 }
