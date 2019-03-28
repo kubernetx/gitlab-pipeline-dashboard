@@ -14,6 +14,6 @@ class GitlabPipelineServiceIT {
 
     @Test
     fun lastPipeLineStatus() {
-        println(gitlabPipelineService.lastPipeLineStatus("org/project1", "^release\\/\\S*"))
+        println(gitlabPipelineService.lastPipeLineStatus("julien.piccaluga/gitlab-pipeline-dashboard-it", "^release\\/\\S*"))
     }
 }

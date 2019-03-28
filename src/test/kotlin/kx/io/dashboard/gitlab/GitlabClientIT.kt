@@ -16,7 +16,7 @@ class GitlabClientIT {
 
     @Test
     fun fetchPipeline() {
-        Assertions.assertThat(gitlabClient.fetchPipelines("org/project1", sort = Sort.DESC)
+        Assertions.assertThat(gitlabClient.fetchPipelines("julien.piccaluga/gitlab-pipeline-dashboard-it", sort = Sort.DESC)
                 .doOnNext{println(it)}
                 .count()
                 .block())
