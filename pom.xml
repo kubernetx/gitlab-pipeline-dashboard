@@ -10,7 +10,7 @@
     </parent>
     <groupId>kx.io</groupId>
     <artifactId>gitlab-pipeline-dashboard</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>gitlab-pipeline-dashboard</name>
     <description>Gitlab ci pipeline dashboard</description>
 

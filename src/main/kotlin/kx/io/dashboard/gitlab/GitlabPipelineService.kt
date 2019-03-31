@@ -23,6 +23,6 @@ class GitlabPipelineService(private val gitlabClient: GitlabClient) {
     }
 }
 
-enum class Status(int: Int) {
-    RUNNING(0), PENDING(1), SUCCESS(2), FAILED(3), CANCELED(4), SKIPPED(5), UNKNOWN(6)
+enum class Status {
+    SUCCESS, RUNNING, PENDING, SKIPPED, CANCELED, UNKNOWN, FAILED
 }

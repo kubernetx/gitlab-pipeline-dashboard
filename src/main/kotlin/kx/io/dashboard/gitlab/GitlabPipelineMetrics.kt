@@ -17,11 +17,11 @@ class GitlabPipelineMetrics(private val gitlabPipelineService: GitlabPipelineSer
     init {
         gitlabProperties.projects.forEach {project ->
             project.branchRefs.forEach {ref ->
-                val metricStatus = AtomicInteger(gitlabPipelineService.lastPipeLineStatus(project.pathWithNamespace, ref).ordinal)
-                meterRegistry.gauge("gitlab",
-                        Tags.of("pathWithNamespace", project.pathWithNamespace, "ref", ref),
+                val metricStatus = AtomicInteger(gitlabPipelineService.lastPipeLineStatus(project.pathWithNamespace, ref.regex).ordinal)
+                meterRegistry.gauge("gitlab-pipeline",
+                        Tags.of("pathWithNamespace", project.pathWithNamespace, "ref", ref.label),
                         metricStatus)
-                projectMap[project.pathWithNamespace + ref] = metricStatus
+                projectMap[project.pathWithNamespace + ref.label] = metricStatus
             }
         }
     }
@@ -30,9 +30,9 @@ class GitlabPipelineMetrics(private val gitlabPipelineService: GitlabPipelineSer
     fun updatePipelineStatus() {
         gitlabProperties.projects.forEach {project ->
             project.branchRefs.forEach {ref ->
-                log.info { "Update gitlab pipeline metric for ${project.pathWithNamespace} with ref pattern $ref" }
-                val projectFromMap = projectMap[project.pathWithNamespace + ref]
-                projectFromMap?.set(gitlabPipelineService.lastPipeLineStatus(project.pathWithNamespace, ref).ordinal)
+                log.info { "Update gitlab pipeline metric for ${project.pathWithNamespace} with ref pattern ${ref.regex}" }
+                val projectFromMap = projectMap[project.pathWithNamespace + ref.label]
+                projectFromMap?.set(gitlabPipelineService.lastPipeLineStatus(project.pathWithNamespace, ref.regex).ordinal)
             }
         }
     }
