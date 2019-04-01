@@ -1,7 +1,21 @@
 language: java
+services:
+  - docker
 jdk: oraclejdk11
 install: true
 script: ./mvnw clean install
 cache:
   directories:
     - $HOME/.m2
+
+
+deploy:
+  provider: script
+  script:
+    - "TAG=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)')"
+    - "docker build -t gitlab-pipeline-dashboard:$TAG ."
+    - "docker tag gitlab-pipeline-dashboard:$TAG jpiccaluga/gitlab-pipeline-dashboard:$TAG"
+    - "docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}"
+    - "docker push jpiccaluga/gitlab-pipeline-dashboard:$TAG"
+  on:
+    branch: master
