@@ -2,9 +2,12 @@ gitlab:
   hostUrl: "https://gitlab.com/api/v4"
   accessToken: ""
   branchRefs:
-    - 'master'
-    - '^feature\/\S*'
-    - '^release\/\S*'
+    - label: 'master'
+      regex: 'master'
+    - label: 'feature/*'
+      regex: '^feature\/\S*'
+    - label: 'release/*'
+      regex: 'release\/\S*'
   projects:
     - pathWithNamespace: "julien.piccaluga/gitlab-pipeline-dashboard-it"
 # Optionally you can override global branchRefs at project level
