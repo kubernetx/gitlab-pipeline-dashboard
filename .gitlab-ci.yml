@@ -1,0 +1,23 @@
+stages:
+  - build
+  - push-docker-image
+
+
+maven-build:
+  image: maven:latest
+  stage: build
+  script: mvn clean install
+  cache:
+    paths:
+      - target
+
+docker:
+  stage: push-docker-image
+  script:
+    - TAG=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)')
+    - docker build -t gitlab-pipeline-dashboard:$TAG .
+    - docker tag gitlab-pipeline-dashboard:$TAG jpiccaluga/gitlab-pipeline-dashboard:$TAG
+    - docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}
+    - docker push jpiccaluga/gitlab-pipeline-dashboard:$TAG
+  only:
+    - master
