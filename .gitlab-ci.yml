@@ -7,11 +7,9 @@ maven-build:
   stage: build
   script:
     - mvn clean install
-    - echo $(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)') | tee version.txt
-  cache:
+  artifacts:
     paths:
       - target
-      - version.txt
 
 docker:
   image: docker:stable
@@ -21,6 +19,7 @@ docker:
     - docker:dind
   stage: push-docker-image
   script:
+    - echo $(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)') | tee version.txt
     - TAG=$(head -n 1 version.txt)
     - docker build -t gitlab-pipeline-dashboard:$TAG .
     - docker tag gitlab-pipeline-dashboard:$TAG jpiccaluga/gitlab-pipeline-dashboard:$TAG
