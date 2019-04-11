@@ -1,6 +1,6 @@
 gitlab:
   hostUrl: "https://gitlab.com/api/v4"
-  accessToken: ""
+  accessToken: "Xpna85JF5x5DjYnT3k_e"
   branchRefs:
     - label: 'master'
       regex: 'master'
