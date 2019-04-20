@@ -13,7 +13,10 @@ class GitlabClient(gitlabProperties: GitlabProperties) {
 
     fun fetchPipelines(projectId: String, perPage: Int = 100, sort: Sort): Flux<Pipeline> {
         return webClient.get()
-                .uri("/projects/{projectId}/pipelines?per_page={perPage}&sort={sort}", projectId, perPage, sort.displayName)
+                .uri("/projects/{projectId}/pipelines?per_page={perPage}&sort={sort}",
+                        projectId,
+                        perPage,
+                        sort.displayName)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(Pipeline::class.java)

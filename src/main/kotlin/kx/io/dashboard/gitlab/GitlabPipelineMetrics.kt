@@ -4,11 +4,12 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tags
 import mu.KotlinLogging
 import org.springframework.scheduling.annotation.Scheduled
+import java.time.LocalTime
 import java.util.concurrent.atomic.AtomicInteger
 
 class GitlabPipelineMetrics(private val gitlabPipelineService: GitlabPipelineService,
                             private val meterRegistry: MeterRegistry,
-                            private val gitlabProperties: GitlabProperties) {
+                            val gitlabProperties: GitlabProperties) {
 
     private val projectMap = mutableMapOf<String, AtomicInteger>()
 
@@ -17,7 +18,8 @@ class GitlabPipelineMetrics(private val gitlabPipelineService: GitlabPipelineSer
     init {
         gitlabProperties.projects.forEach {project ->
             project.branchRefs.forEach {ref ->
-                val metricStatus = AtomicInteger(gitlabPipelineService.lastPipeLineStatus(project.pathWithNamespace, ref.regex).ordinal)
+                val statusValue = gitlabPipelineService.lastPipelineStatusValue(project.pathWithNamespace, ref.regex)
+                val metricStatus = AtomicInteger(statusValue)
                 meterRegistry.gauge("gitlab-pipeline",
                         Tags.of("pathWithNamespace", project.pathWithNamespace, "ref", ref.label),
                         metricStatus)
@@ -26,15 +28,16 @@ class GitlabPipelineMetrics(private val gitlabPipelineService: GitlabPipelineSer
         }
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRateString = "#{@gitlabPipelineMetrics.gitlabProperties.pollingMs}")
     fun updatePipelineStatus() {
+        log.info { "Fetching pipeline status at ${LocalTime.now()}" }
         gitlabProperties.projects.forEach {project ->
             project.branchRefs.forEach {ref ->
-                log.info { "Update gitlab pipeline metric for ${project.pathWithNamespace} with ref pattern ${ref.regex}" }
+                val msg = "Update gitlab pipeline metric for ${project.pathWithNamespace} with ref pattern ${ref.regex}"
+                log.info { msg }
                 val projectFromMap = projectMap[project.pathWithNamespace + ref.label]
-                projectFromMap?.set(gitlabPipelineService.lastPipeLineStatus(project.pathWithNamespace, ref.regex).ordinal)
+                projectFromMap?.set(gitlabPipelineService.lastPipelineStatusValue(project.pathWithNamespace, ref.regex))
             }
         }
     }
-
 }

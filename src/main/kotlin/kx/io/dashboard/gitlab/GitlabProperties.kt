@@ -9,6 +9,7 @@ class GitlabProperties {
     lateinit var accessToken: String
     lateinit var projects: List<ProjectConfig>
     lateinit var branchRefs: List<BranchRef>
+    var pollingMs: Int = 10000
 
     @PostConstruct
     fun initIt() {

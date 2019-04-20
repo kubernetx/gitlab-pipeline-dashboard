@@ -21,6 +21,10 @@ class GitlabPipelineService(private val gitlabClient: GitlabClient) {
                 }
                 .blockFirst() ?: Status.UNKNOWN
     }
+
+    fun lastPipelineStatusValue(projectId: String, branchName: String) : Int {
+        return lastPipeLineStatus(projectId, branchName).ordinal
+    }
 }
 
 enum class Status {

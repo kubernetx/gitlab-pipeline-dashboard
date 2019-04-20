@@ -1,6 +1,7 @@
 gitlab:
+  pollingMs: 20000
   hostUrl: "https://gitlab.com/api/v4"
-  accessToken: "Xpna85JF5x5DjYnT3k_e"
+  accessToken: "J9g53Qt2sigRzCjj_Ewk"
   branchRefs:
     - label: 'master'
       regex: 'master'
@@ -16,7 +17,7 @@ gitlab:
 #        - '^feature\/\S*'
 #        - '^release\/\S*'
 server:
-  port: 3000
+  port: 8080
 
 management:
   endpoint:
