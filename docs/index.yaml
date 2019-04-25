@@ -3,11 +3,11 @@ entries:
   gitlab-pipeline-dashboard:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-04-23T09:18:37.638503551+02:00
+    created: 2019-04-25T17:07:33.61372389+02:00
     description: A Helm chart for Kubernetes
-    digest: 5e5b41629fdcbd67ac952e299c51228f99e05daef4833f596f9c49bf6c2fd14a
+    digest: 5cd200474973329903d84da002008d4665a077c7cf3522d7f6752fc11c1a68e4
     name: gitlab-pipeline-dashboard
     urls:
     - gitlab-pipeline-dashboard-1.0.0-SNAPSHOT.tgz
     version: 1.0.0-SNAPSHOT
-generated: 2019-04-23T09:18:37.63788136+02:00
+generated: 2019-04-25T17:07:33.613450182+02:00
