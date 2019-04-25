@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "cfc.name" . }}
+  name: {{ template "app.name" . }}
   labels:
-    app: {{ template "cfc.name" . }}
-    chart: {{ template "cfc.chart" . }}
+    app: {{ template "app.name" . }}
+    chart: {{ template "app.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
