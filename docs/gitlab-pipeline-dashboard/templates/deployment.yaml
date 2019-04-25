@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "cfc.name" . }}
+  labels:
+    app: {{ template "cfc.name" . }}
+    chart: {{ template "cfc.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "cfc.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "cfc.name" . }}
+        release: {{ .Release.Name }}
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/actuator/prometheus'
+        prometheus.io/port:  '8080'
+    spec:
+      volumes:
+        - name: application-properties
+          configMap:
+            name: application-config
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.name }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: application-properties
+              mountPath: "/opt/app/config"
+              readOnly: true
+          env:
+            {{- with .Values.env }}
+              {{- . | toYaml | nindent 12 -}}
+              {{- end }}
+          ports:
+            {{- range .Values.container.ports }}
+            - containerPort: {{ .containerPort }}
+              protocol: {{ .protocol }}
+              name: {{ .name }}
+            {{- end }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.container.readinessProbe.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /actuator/info
+              port: {{ .Values.container.livenessProbe.port }}
+            initialDelaySeconds: 120
+            periodSeconds: 20
+          resources:
+  {{ toYaml .Values.resources | indent 12 }}
+  {{- with .Values.nodeSelector }}
+nodeSelector:
+  {{ toYaml . | indent 8 }}
+  {{- end }}
+  {{- with .Values.affinity }}
+affinity:
+  {{ toYaml . | indent 8 }}
+  {{- end }}
+  {{- with .Values.tolerations }}
+tolerations:
+  {{ toYaml . | indent 8 }}
+  {{- end }}

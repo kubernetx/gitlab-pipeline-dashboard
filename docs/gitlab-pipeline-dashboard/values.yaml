@@ -1,0 +1,61 @@
+---
+replicaCount: "1"
+env: []
+image:
+  name: "cfc-docker-dev.artifactory.ks.net:443/cfc/gitlab-pipeline-dashboard@sha256:5151134f46599291a7d198ec1ae25ffdb04e56c45eff5e0279842d3b34dfd616"
+  pullPolicy: "IfNotPresent"
+container:
+  ports:
+    - name: "http"
+      containerPort: 8080
+      protocol: "TCP"
+  readinessProbe:
+    port: 8080
+  livenessProbe:
+    port: 8080
+service:
+  type: "ClusterIP"
+  ports:
+    - name: "http"
+      port: 8080
+      targetPort: 8080
+resources:
+  limits:
+    memory: "512Mi"
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
+application:
+  gitlab:
+    pollingMs: 20000
+    hostUrl: "https://gitlab.com/api/v4"
+    accessToken: "J9g53Qt2sigRzCjj_Ewk"
+    branchRefs:
+      - label: 'master'
+        regex: 'master'
+      - label: 'feature/*'
+        regex: '^feature\/\S*'
+      - label: 'release/*'
+        regex: 'release\/\S*'
+    projects:
+      - pathWithNamespace: "julien.piccaluga/gitlab-pipeline-dashboard-it"
+  # Optionally you can override global branchRefs at project level
+  #      branchRefs:
+  #        - 'master'
+  #        - '^feature\/\S*'
+  #        - '^release\/\S*'
+  server:
+    port: 8080
+
+  management:
+    endpoint:
+      prometheus:
+        cache:
+          time-to-live: 0ms
+        enabled: true
+
+    endpoints:
+      web:
+        exposure:
+          include: info, health, prometheus

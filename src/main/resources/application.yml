@@ -8,7 +8,7 @@ gitlab:
     - label: 'feature/*'
       regex: '^feature\/\S*'
     - label: 'release/*'
-      regex: 'release\/\S*'
+      regex: '^release\/\S*'
   projects:
     - pathWithNamespace: "julien.piccaluga/gitlab-pipeline-dashboard-it"
 # Optionally you can override global branchRefs at project level
