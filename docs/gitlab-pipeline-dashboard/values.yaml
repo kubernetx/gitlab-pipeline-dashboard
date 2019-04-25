@@ -2,7 +2,7 @@
 replicaCount: "1"
 env: []
 image:
-  name: "cfc-docker-dev.artifactory.ks.net:443/cfc/gitlab-pipeline-dashboard@sha256:5151134f46599291a7d198ec1ae25ffdb04e56c45eff5e0279842d3b34dfd616"
+  name: "registry.gitlab.com/kubernetx/gitlab-pipeline-dashboard:v1.0.0"
   pullPolicy: "IfNotPresent"
 container:
   ports:
