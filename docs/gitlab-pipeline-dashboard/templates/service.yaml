@@ -21,5 +21,5 @@ spec:
       name: {{ .name }}
     {{- end }}
   selector:
-    app: {{ template "cfc.name" . }}
+    app: {{ template "app.name" . }}
     release: {{ .Release.Name }}
