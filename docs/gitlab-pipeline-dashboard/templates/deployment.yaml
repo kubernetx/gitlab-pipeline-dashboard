@@ -36,6 +36,11 @@ spec:
               mountPath: "/opt/app/config"
               readOnly: true
           env:
+            - name: GITLAB_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: gitlab-access-token
+                  key: api-token
             {{- with .Values.env }}
               {{- . | toYaml | nindent 12 -}}
               {{- end }}
