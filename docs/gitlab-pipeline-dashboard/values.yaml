@@ -2,7 +2,7 @@
 replicaCount: "1"
 env: []
 image:
-  name: "registry.gitlab.com/kubernetx/gitlab-pipeline-dashboard:v1.0.0"
+  name: "registry.gitlab.com/kubernetx/gitlab-pipeline-dashboard:v1.1.0"
   pullPolicy: "IfNotPresent"
 container:
   ports:
